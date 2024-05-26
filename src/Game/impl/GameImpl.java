@@ -59,6 +59,24 @@ public class GameImpl implements Game {
     }
 
     @Override
+    public void setupGame(Character player, Character computer) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("게임 난이도를 선택하세요 (EASY, MEDIUM, HARD):");
+        String difficultyInput = scanner.nextLine().toUpperCase();
+        Difficulty difficulty;
+        try {
+            difficulty = Difficulty.valueOf(difficultyInput);
+        } catch (IllegalArgumentException e) {
+            System.out.println("잘못된 난이도입니다. EASY, MEDIUM, HARD 중 하나를 입력해주세요.");
+            return;
+        }
+        this.difficulty = difficulty;
+    }
+
+
+
+    @Override
     public boolean playRound(Character player, Character computer) {
         boolean result = false;
         Scanner scanner = new Scanner(System.in);
@@ -110,6 +128,52 @@ public class GameImpl implements Game {
             System.out.println(player.getHealth());
         }
         return result;
+    }
+
+    @Override
+    public void playGame() {
+        System.out.println("게임을 시작합니다!");
+
+        for (int round = 1; round <= 15; round++) {
+            System.out.println("라운드 " + round + " 시작!");
+            boolean result = playRound(player, computer);
+
+            if (result) {
+                handleRoundWin(round);
+            } else {
+                System.out.println("당신이 졌습니다!");
+                player.resetCurrentHealth();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void handleRoundWin(int round) {
+        System.out.println("당신이 이겼습니다!");
+        increaseScore();
+
+        if (round == 15) {
+            endGame();
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("다음 라운드로 진행하시겠습니까? (yes/no)");
+        String input = scanner.nextLine().toLowerCase();
+
+        if (input.equals("no")) {
+            endGame();
+        } else if (!input.equals("yes")) {
+            System.out.println("잘못된 입력입니다. 'yes' 또는 'no'를 입력해주세요.");
+        }
+    }
+
+    @Override
+    public void endGame() {
+        System.out.println("게임을 종료합니다.");
+        player.addExperience(getScore());
+        player.resetCurrentHealth();
+        rewardRandomItem(player);
     }
 
     @Override

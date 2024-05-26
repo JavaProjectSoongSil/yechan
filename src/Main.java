@@ -20,7 +20,7 @@ public class Main {
         System.out.print("캐릭터 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
 
-        Character player = new Player(playerName,1,  100, 20, 5);
+        Character player = new Player(playerName, 1, 100, 20, 5);
 
         boolean running = true;
 
@@ -33,16 +33,16 @@ public class Main {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1:
+                case 1: // 게임진행
                     startGame(player);
                     break;
-                case 2:
+                case 2: // 캐릭터 정보
                     player.showInformation();
                     break;
-                case 3:
+                case 3: // 인벤토리
                     showInventory(player);
                     break;
-                case 4:
+                case 4: // 게임 종료
                     running = false;
                     break;
                 default:
@@ -54,10 +54,9 @@ public class Main {
     }
 
     public static void startGame(Character player) {
-        Character computer = new Player("컴퓨터", 1, 100, 20, 5);
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("게임 난이도를 선택하세요 (EASY, MEDIUM, HARD):");
+        System.out.println("게임 난이도를 선택하세요 (EASY, MEDIUM, HARD):"); // 난이도 설정
         String difficultyInput = scanner.nextLine().toUpperCase();
         Difficulty difficulty;
         try {
@@ -66,49 +65,11 @@ public class Main {
             System.out.println("잘못된 난이도입니다. EASY, MEDIUM, HARD 중 하나를 입력해주세요.");
             return;
         }
-        Game game = new GameImpl(player, computer, difficulty);
 
-        System.out.println("게임을 시작합니다!");
+        Character computer = createComputerCharacter(difficulty); // 컴퓨터 캐릭터 생성
+        Game game = new GameImpl(player, computer, difficulty); // 게임 생성
 
-        for (int round = 1; round <= 15; round++) {
-            System.out.println("라운드 " + round + " 시작!");
-            boolean result = false;
-
-            result = game.playRound(player, computer); // 라운드 진행 ( 1=승리, 0=패배)
-
-            if (result) { // 라운드 우승 OR 마지막 라운드
-                System.out.println("당신이 이겼습니다!");
-                game.increaseScore(); // 점수 증가
-
-                if(round == 15){
-                    System.out.println("게임을 종료합니다.");
-                    player.addExperience(game.getScore()); // Score를 경험치로 추가
-                    player.resetCurrentHealth(); // 플레이어 체력 초기화
-                    game.rewardRandomItem(player);
-                }
-
-                System.out.println("다음 라운드로 진행하시겠습니까? (yes/no)");
-                String input = scanner.nextLine().toLowerCase();
-                switch (input) {
-                    case "yes": // 다음 라운드 진행
-                        game.updateRound();
-                        break;
-                    case "no": // 게임 종료
-                        System.out.println("게임을 종료합니다.");
-                        player.addExperience(game.getScore()); // Score를 경험치로 추가
-                        player.resetCurrentHealth(); // 플레이어 체력 초기화
-                        return;
-                    default: // 잘못된 입력
-                        System.out.println("잘못된 입력입니다. 'yes' 또는 'no'를 입력해주세요.");
-                        break;
-                }
-            }
-            else { // 라운드 패배
-                System.out.println("당신이 졌습니다!");
-                player.resetCurrentHealth(); // 플레이어 체력 초기화
-                break;
-            }
-        }
+        game.playGame(); // 게임시작
     }
 
     private static void showInventory(Character player) {
@@ -134,6 +95,19 @@ public class Main {
                 break;
             }
             inventory.handleUserInput(player, input);
+        }
+    }
+
+    private static Character createComputerCharacter(Difficulty difficulty) {
+        switch (difficulty) {
+            case EASY: // 쉬움
+                return new Player("computer", 1, 80, 15, 3);
+            case MEDIUM: // 중간
+                return new Player("computer", 1, 100, 20, 5);
+            case HARD: // 어려움
+                return new Player("computer", 1, 120, 25, 7);
+            default:
+                throw new IllegalArgumentException(); // 잘못된 난이도가 입력된 경우 예외 발생
         }
     }
 }
