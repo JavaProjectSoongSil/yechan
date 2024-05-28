@@ -1,10 +1,8 @@
 package Inventory.impl;
 
-import Card.direction.Direction;
 import Card.impl.AttackCard;
 import Card.impl.DefenseCard;
 import Card.impl.HealCard;
-import Card.impl.MoveCard;
 import Character.impl.Player;
 import Inventory.Inventory;
 
@@ -29,17 +27,7 @@ public class InventoryImpl implements Inventory {
         Item basicItem = new Weapon("기본 공격무기",2);
         this.items.add(basicItem);
 
-        // 이동 카드 추가
-        Card moveUpCard = new MoveCard("위로 이동 카드", Direction.UP, 1);
-        Card moveDownCard = new MoveCard("아래로 이동 카드", Direction.DOWN, 1);
-        Card moveLeftCard = new MoveCard("왼쪽으로 이동 카드", Direction.LEFT, 1);
-        Card moveRightCard = new MoveCard("오른쪽으로 이동 카드", Direction.RIGHT, 1);
-        this.cards.add(moveUpCard);
-        this.cards.add(moveDownCard);
-        this.cards.add(moveLeftCard);
-        this.cards.add(moveRightCard);
-
-        // 공격, 방어, 회복 카드 추가
+        // 기본 공격, 방어, 회복 카드 추가
         Card attackCard = new AttackCard("기본 공격 카드", 10);
         Card defenseCard = new DefenseCard("기본 방어 카드");
         Card healCard = new HealCard("기본 회복 카드", 5);
@@ -110,7 +98,7 @@ public class InventoryImpl implements Inventory {
     }
 
     @Override
-    public void handleUserInput(Character player, String input) {
+    public void handleInventory(Character player, String input) {
 
         // 카드 삭제
         if (input.startsWith("delete card ")) {

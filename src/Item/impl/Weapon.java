@@ -13,13 +13,21 @@ public class Weapon implements Item{
     }
 
     @Override
-    public int getAttackPower() {
-        return this.attackPower;
-    }
-    @Override
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public int getAttackPower() {
+        return this.attackPower;
+    }
+
+
+    @Override
+    public void enforceItem(Character player) {
+
+    }
+
 
 
 }

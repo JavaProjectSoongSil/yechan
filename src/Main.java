@@ -66,10 +66,38 @@ public class Main {
             return;
         }
 
-        Character computer = createComputerCharacter(difficulty); // 컴퓨터 캐릭터 생성
+        Character computer = createComputerCharacter(difficulty); // 난이도에 따라, 컴퓨터 캐릭터 생성
+
         Game game = new GameImpl(player, computer, difficulty); // 게임 생성
 
-        game.playGame(); // 게임시작
+        System.out.println("게임을 시작합니다!");
+
+        for (int round = 1; round <= 15; round++) {
+            System.out.println("라운드 " + round + " 시작!");
+            boolean result = game.playRound(player, computer); // 한 라운드에선 사용자와 컴퓨터가 턴제 게임 진행
+
+            if (result) {
+                System.out.println("당신이 이겼습니다!");
+                game.increaseScore(); // 이겼을땐, 점수 증가
+
+                if (round == 15)  // 만약 마지막 라운드일 경우, 바로 종료
+                    game.endGame(); // (리워드 보상 및 최종 점수 출력)
+
+                System.out.println("다음 라운드로 진행하시겠습니까? (yes/no)");
+                String input = scanner.nextLine().toLowerCase();
+
+                if (input.equals("no")) {
+                    game.endGame(); // 다음 라운드 이동 안할 시, 리워드 보상 및 최종 점수 출력
+                } else if (!input.equals("yes")) {
+                    System.out.println("잘못된 입력입니다. 'yes' 또는 'no'를 입력해주세요.");
+                }
+
+            } else {
+                System.out.println("당신이 졌습니다!");
+                player.resetHealth(); // 졌을땐, 체력 초기화
+                break;
+            }
+        }
     }
 
     private static void showInventory(Character player) {
@@ -94,7 +122,8 @@ public class Main {
             if (input.equalsIgnoreCase("exit")) {
                 break;
             }
-            inventory.handleUserInput(player, input);
+
+            inventory.handleInventory(player, input); // 사용자 입력에 따라, 인벤토리 제어
         }
     }
 

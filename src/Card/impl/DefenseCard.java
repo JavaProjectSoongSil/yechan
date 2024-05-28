@@ -17,6 +17,5 @@ public class DefenseCard implements Card{
 
     @Override
     public void use(Character player, Character opponent) {
-        player.setShiled(true);
     }
 }
