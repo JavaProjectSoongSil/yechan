@@ -4,8 +4,8 @@ import Card.Card;
 import Character.Character;
 
 public class HealCard implements Card{
-    String name;
-    int healPower;
+    private String name;
+    private int healPower;
 
     public HealCard(String name, int healPower) {
         this.name = name;

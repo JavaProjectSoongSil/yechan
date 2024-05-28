@@ -4,8 +4,8 @@ import Card.Card;
 import Character.Character;
 
 public class AttackCard implements Card{
-    String name;
-    int attackPower;
+    private String name;
+    private int attackPower;
 
     public AttackCard(String name, int attackPower) {
         this.name = name;
