@@ -11,10 +11,13 @@ public interface Character {
     void showInformation(); // 캐릭터 정보 출력
 
 
+
     void equipItem(Item item); // 아이템 장착
     void unequipItem(); // 아이템 장착해제
 
-    void resetHealth(); // 캐릭터 체력 초기화
+
+
+    void resetHealth(); // 캐릭터 체력 초기화 (죽었을때 + 추후 레벨업 구현할때?)
 
 
 

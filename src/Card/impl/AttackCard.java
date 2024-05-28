@@ -4,7 +4,7 @@ import Card.Card;
 import Character.Character;
 
 public class AttackCard implements Card{
-    private String name;
+    private String name; // + 카드를 설명 변수가 있어야할지...???
     private int attackPower;
 
     public AttackCard(String name, int attackPower) {
